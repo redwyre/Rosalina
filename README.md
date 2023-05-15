@@ -18,6 +18,8 @@ Rosalina is a code generation tool for Unity's UI documents make with the new UI
 Rosalina can either be installed via OpenUPM: https://openupm.com/packages/com.eastylabs.rosalina/
 Or by using the following git repository: ``https://github.com/Eastrall/Rosalina.git``
 
+You will also need a copy of the Roslyn code analysis dlls, which can be added with the package ``https://github.com/merryyellow/code-analysis-3-11.git``
+
 ### Installing via OpenUPM
 
 Rosalina is now available via OpenUPM:
