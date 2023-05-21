@@ -16,6 +16,11 @@ internal class UxmlNode
     public string Name { get; }
 
     /// <summary>
+    /// Gets the UXML template.
+    /// </summary>
+    public string Template { get; }
+
+    /// <summary>
     /// Gets a boolean value that indicates if the current UXML node is the root node.
     /// </summary>
     public bool IsRoot { get; }
@@ -35,11 +40,13 @@ internal class UxmlNode
     /// </summary>
     /// <param name="type">Node type.</param>
     /// <param name="name">Node name.</param>
+    /// <param name="template">Node template.</param>
     /// <param name="isRoot">Is root node.</param>
-    public UxmlNode(string type, string name, bool isRoot = false)
+    public UxmlNode(string type, string name, string template, bool isRoot = false)
     {
         Type = type;
         Name = name;
+        Template = template;
         IsRoot = isRoot;
     }
 }
