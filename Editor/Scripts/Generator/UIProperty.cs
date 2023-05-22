@@ -27,16 +27,22 @@ internal readonly struct UIProperty
     public string Name { get; }
 
     /// <summary>
+    /// Gets the UI property template that is used for generating C# properties during the code generation process.
+    /// </summary>
+    public string Template { get; }
+
+    /// <summary>
     /// Gets the UI property name as described in the UXML file.
     /// </summary>
     public string OriginalName { get; }
 
-    public UIProperty(string type, string name)
+    public UIProperty(string type, string name, string template)
     {
         TypeName = type;
         Type = UIPropertyTypes.GetUIElementType(type);
         OriginalName = name;
         Name = name.Contains('-') ? name.ToPascalCase() : OriginalName;
+        Template = template;
     }
 }
 

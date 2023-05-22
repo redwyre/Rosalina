@@ -17,9 +17,11 @@ internal static class RosalinaStatementSyntaxFactory
     public static InitializationStatement[] GenerateInitializeStatements(UxmlDocument uxmlDocument, MemberAccessExpressionSyntax documentQueryMethodAccess)
     {
         var statements = new List<InitializationStatement>();
-        IEnumerable<UIProperty> properties = uxmlDocument.GetChildren().Select(x => new UIProperty(x.Type, x.Name)).ToList();
+        IEnumerable<UIProperty> properties = uxmlDocument.GetChildren().Select(x => new UIProperty(x.Type, x.Name, x.Template)).ToList();
 
         var templates = properties.Where(p => p.TypeName == Template).ToDictionary(x => x.Name);
+
+        properties = properties.Where(p => p.TypeName != Template);
 
         if (CheckForDuplicateProperties(properties))
         {
@@ -29,7 +31,8 @@ internal static class RosalinaStatementSyntaxFactory
         foreach (UIProperty uiProperty in properties)
         {
             bool isInstance = uiProperty.TypeName == Instance;
-            var propertyTypeName = isInstance ? uiProperty.Name : uiProperty.Type?.Name;
+            var template = isInstance ? templates[uiProperty.Template] : new UIProperty();
+            var propertyTypeName = isInstance ? template.Name : uiProperty.Type?.Name;
 
             if (propertyTypeName is null)
             {
@@ -62,7 +65,6 @@ internal static class RosalinaStatementSyntaxFactory
 
             if (isInstance)
             {
-                var template = templates[uiProperty.Name];
                 var templateType = IdentifierName(template.Name);
                 statement = ExpressionStatement(
                     AssignmentExpression(
@@ -108,8 +110,7 @@ internal static class RosalinaStatementSyntaxFactory
 
     private static bool CheckForDuplicateProperties(IEnumerable<UIProperty> properties)
     {
-        // ignore template names as they can be duplicated
-        var duplicatePropertyGroups = properties.Where(x => x.TypeName != Template).GroupBy(x => x.Name).Where(g => g.Count() > 1);
+        var duplicatePropertyGroups = properties.GroupBy(x => x.Name).Where(g => g.Count() > 1);
         bool containsDuplicateProperties = duplicatePropertyGroups.Any();
 
         if (containsDuplicateProperties)
